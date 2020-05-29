@@ -52,9 +52,9 @@ distances_lat_long(F,T, LAT_DIST, LONG_DIST):- lat_distance(LAT_DIST,F,T,_,_), l
 %calculate the sum of squarred longitude and latitude distances
 % no possibility to get the square root in ASP, but the principle is the same as in pythagoras
 sum_AB(SUM_AB,F,T):- distances_lat_long(F,T,A,B), A_COMP = A*A, B_COMP = B*B, SUM_AB = B_COMP+A_COMP.
-
 %searching for the sequence of destinations with the smallest sum regarding the single distances between the destinations:
-#minimize{SUM_AB: sum_AB(SUM_AB,_,_)}.
+#minimize{SUM_AB,F,T: sum_AB(SUM_AB,F,T)}.
+
 
 %constraints:
 %forbid to travel from destination A to destination A:
@@ -66,12 +66,12 @@ sum_AB(SUM_AB,F,T):- distances_lat_long(F,T,A,B), A_COMP = A*A, B_COMP = B*B, SU
 % forbid "Ping pong" travelling among two destinations:
 :- travel_to(A,B), travel_to(B,A), B!=A.
 
+
+%first of all not allowing any destinations that are not included in the trip:
 :- not connected_to_trip(D), dest(_,_,D).
+
 % it cannot be the case that we are not travelling back to our starting point:
 :- not last_journey(_,B), start_at(_,_,B).
 
 %output
-%#show sum_AB/3.
-#show display_connection/2.
-
-%#show minimized_v/1.
+#show sum_AB/3.
