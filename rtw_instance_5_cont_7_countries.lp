@@ -1,12 +1,22 @@
 % structure: dest(lat, long, name)
-dest(54, 28, "Minsk").
-
+%**dest(54, 28, "Minsk").
 dest(56, 92, "Krasnoyarsk").
 dest(-37,174, "Auckland").
 dest(-55, -68, "Ushuaia").
 dest(-9,	13, "Luanda").
 dest(25,	47, "Riyadh").
 dest(14,	101, "Bangkok").
+**%
+dest(54, 28, "Minsk", "Europe").
+dest(56, 92, "Krasnoyarsk", "Europe").
+dest(-37,174, "Auckland", "Australia").
+dest(-55, -68, "Ushuaia", "South America").
+dest(-9,	13, "Luanda", "Africa").
+dest(25,	47, "Riyadh", "Africa").
+dest(14,	101, "Bangkok", "Asia").
+
+start_at(53, 13, "Berlin", "Europe").
+
 %*
 dest(-34, 18, "Cape Town").
 dest(24,	90, "Dhaka").
