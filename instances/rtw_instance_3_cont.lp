@@ -15,3 +15,8 @@ dest("-36.848461","174.763336", "Auckland", "Australia").
 %dest("-12.974722", "-38.476665", "Salvador","South America").
 dest("-34.603722", "-58.381592", "Buenos Aires", "South America").
 dest("-0.180653", "-78.467834", "Quito", "South America").
+
+
+money("10000").
+weeks("10.5").
+est_nr_destinations("20").

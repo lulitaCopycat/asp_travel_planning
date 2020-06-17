@@ -37,7 +37,7 @@ dest("30.583332", "114.283333", "Wuhan", "Asia").
 dest("35.715298", "51.404343", "Tehran", "Asia").
 dest("34.543896", "69.160652", "Kabul", "Asia").
 dest("24.926294", "67.022095", "Karachi", "Asia").
-dest("31.582045", "74.329376", "Lahore", "Asia"). 
+dest("31.582045", "74.329376", "Lahore", "Asia").
 
 
 
@@ -49,7 +49,7 @@ preferences of the traveller:
 budget, time, reason to travel, goals
 **%
 money(10000).
-time(10).
+weeks(10).
 est_nr_destinations(20).
 
 travel_reason("Adventure and Action").
