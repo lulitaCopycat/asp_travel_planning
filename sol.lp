@@ -1,7 +1,3 @@
-nums(S, C):- dest(_,_,S,C).
-num_cont(S):- S= #count{C: nums(_,C)}.
-continent(C):- dest(_,_,_,C).
-
 {first_destination(D): dest(_,_,D,_)}=1.
 {travel_to(A,B): dest(_,_,B,_)}=1:- dest(_,_,A,_).
 travel_to(S,B):- start_at(_,_,S,_), first_destination(B).
@@ -15,9 +11,12 @@ display_connection(F,T):- last_journey(F,T).
 
 connected_to_trip(D):- last_journey(D,_).
 connected_to_trip(D):- first_destination(D).
-connected_to_trip(D):- last_journey(F,_), travel_to(D,F).
-connected_to_trip(D):- travel_to(D,F), connected_to_trip(F).
-connected_to_trip(D):- travel_to(F,D), connected_to_trip(F).
+%connected_to_trip(D):- last_journey(F,_), travel_to(D,F).
+connected_to_trip(D):- travel_to(D,F), connected_to_trip(F), dest(_,_,D,_).
+connected_to_trip(D):- travel_to(F,D), connected_to_trip(F), dest(_,_,D,_).
+
+visited_continents(C):- connected_to_trip(D), dest(_,_,D,C).
+
 
 long_lat_vals(LAT_F,LONG_F,F, LAT_T,LONG_T,T):- display_connection(F,T), dest(LAT_F,LONG_F,F,_),dest(LAT_T,LONG_T,T,_).
 long_lat_vals(LAT_F,LONG_F,F, LAT_T,LONG_T,T):- display_connection(F,T), start_at(LAT_F,LONG_F,F,_),dest(LAT_T,LONG_T,T,_).
@@ -25,15 +24,15 @@ long_lat_vals(LAT_F,LONG_F,F, LAT_T,LONG_T,T):- display_connection(F,T), dest(LA
 
 %greater_than(Y):- contact_to_locals((_,Y),(_,_)), Y>5.
 %greater_than(N):- contact_to_locals((_,Y),(_,N)), Y<5.
-test_div(R):- R=2-3.
-left("3").
-right("2").
-c("4").
+%test_div(R):- R=2-3.
+%left("3").
+%right("2").
+%c("4").
 
 #script(python).
 import math
-def division(A,B):
-  return str(float(A.string) / float(B.string))
+#def division(A,B):
+#  return str(float(A.string) / float(B.string))
 
 #get the lengths:
 #def get_length(f_lat,f_long,t_lat,t_long):
@@ -93,7 +92,9 @@ distances(@get_distance(LAT_F,LONG_F,F, LAT_T,LONG_T,T), F,T):- long_lat_vals(LA
 total_travelled_distance(S):- S = #sum{D : distances(D,_,_)}.
 #minimize{SUM_DIST: total_travelled_distance(SUM_DIST)}.
 
-
+count_visited_destinations(S):- S=#count{C: connected_to_trip(C)}.
+count_cont_with_count(S):- S=#count{C:visited_continents(C)}.
+count_cont_with_sum(S):- S=#count{C:visited_continents(C)}.
 
 %constraints:
 %forbid to travel from destination A to destination A:
@@ -107,10 +108,18 @@ total_travelled_distance(S):- S = #sum{D : distances(D,_,_)}.
 
 :- not last_journey(_,B), start_at(_,_,B,_).
 %first of all not allowing any destinations that are not included in the trip:
-:- not connected_to_trip(D), dest(_,_,D,_).
+%:- not connected_to_trip(D), dest(_,_,D,_).
+% :- S = #count{C: visited_continents(C)}, S<3.
+:- count_cont_with_count(S), S<3.
 
-%#show num_cont/1.
+
 %#show continent/1.
-#show distances/3.
-%#show display_connection/2.
+%#show distances/3.
+%#show visited_continents/1.
+%#show count_visited_destinations/1.
+%#show connected_to_trip/1.
+#show travel_to/2.
+
+%#show count_cont_with_count/1.
+%#show count_cont_with_sum/1.
 #show total_travelled_distance/1.
