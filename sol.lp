@@ -1,5 +1,15 @@
 
-threshold(5).
+
+calculate_money_time_ratio(@classify_wealth(M, W, "prog")):- money(M), weeks(W).
+get_number_of_destinations(@destinations(M, W, "python")):- money(M), weeks(W).
+
+threshold(T):- get_number_of_destinations(T).
+int_instance(@return_as_int(I)):- est_nr_destinations(I).
+int_program(@return_as_int(I)):- get_number_of_destinations(I).
+
+get_delta_estimation_destination_number(D):- |A-B|=D, int_instance(A), int_program(B).
+
+
 3{travel_Destination(LONG,LAT,D,C): dest(LONG,LAT,D,C)}T:- threshold(T).
 {first_destination(D): travel_Destination(_,_,D,_)}=1.
 {travel_to(A,B): travel_Destination(_,_,B,_)}=1:- travel_Destination(_,_,A,_).
@@ -73,10 +83,22 @@ def get_distance(f_lat,f_long,f, t_lat,t_long, t):
     return int(round(c,0))
 
 
+def get_type(input_param):
+#    type_of_param = int(input_param.string)
+    type_of_param = int(input_param.string)
+#    type_of_param = input_param.int
+    return str(type(type_of_param))
+
+def return_as_int(factor):
+    return int(factor.string)
+
+def delta_expactations_destination_number(E,R):
+    return abs(E-R)
+
 def destinations(money, weeks, caller):
     financial_category, destinations = classify_wealth(money,weeks, caller)
 #    we = float(w.string)
-    return str(destinations)
+    return str(int(destinations))
 
 def classify_wealth(total_amount, weeks, caller):
     money = float(total_amount.string)
@@ -121,6 +143,7 @@ count_cont_with_count(S):- S=#count{C:visited_continents(C)}.
 
 calculate_money_time_ratio(@classify_wealth(M, W, "prog")):- money(M), weeks(W).
 get_number_of_destinations(@destinations(M, W, "python")):- money(M), weeks(W).
+
 %get_weeks(@weeks(W)):- weeks(W).
 
 %constraints:
@@ -146,11 +169,16 @@ get_number_of_destinations(@destinations(M, W, "python")):- money(M), weeks(W).
 %#show connected_to_trip/1.
 %#show travel_to/2.
 %#show travel_Destination/4.
-#show calculate_money_time_ratio/1.
-#show weeks/1.
+%#show calculate_money_time_ratio/1.
+%#show weeks/1.
 %#show get_weeks/1
+#show get_delta_estimation_destination_number/1.
+%#show est_nr_destinations/1.
+%#show get_number_of_destinations/1.
 
-#show get_number_of_destinations/1.
+
+%#show type_in_instance/1.
+%#show type_in_program/1.
 
 %#show count_cont_with_count/1.
 %#show count_cont_with_sum/1.
