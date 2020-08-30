@@ -45,13 +45,21 @@ dest("24.926294", "67.022095", "Karachi", "Asia").**%
 %**should contain:
 budget, time, reason to travel, goals
 **%
-money(10000).
+
+
+money("10000").
+weeks("10").
+est_nr_destinations("10").
+
+%travel_reason("Adventure and Action").
+%food_finding("Cook in accomodation").
+%surrounding(("Nature",8),("city",2)).
+%transport_mode("no preferences").
+%contact_to_locals(("yes",8),("no",2)).
+
+
+
+%**money(10000).
 time(10).
-est_nr_destinations(20).
-
-travel_reason("Adventure and Action").
-
-food_finding("Cook in accomodation").
-surrounding(("Nature",8),("city",2)).
-transport_mode("no preferences").
-contact_to_locals(("yes",8),("no",2)).
+weeks("10").
+est_nr_destinations(20).**%

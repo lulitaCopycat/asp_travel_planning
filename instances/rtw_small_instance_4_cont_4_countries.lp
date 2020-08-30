@@ -4,3 +4,8 @@ dest("53.893009", "27.567444", "Minsk", "Europe").
 dest("-36.848461","174.763336", "Auckland", "Australia").
 dest("-54.7999968", "-68.2999988", "Ushuaia", "South America").
 dest("29.749907", "-95.358421", "Houston", "North America").
+
+
+money("3000").
+weeks("1.5").
+est_nr_destinations("4").
