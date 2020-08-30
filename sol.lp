@@ -1,5 +1,3 @@
-
-
 calculate_money_time_ratio(@classify_wealth(M, W, "prog")):- money(M), weeks(W).
 get_number_of_destinations(@destinations(M, W, "python")):- money(M), weeks(W).
 

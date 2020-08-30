@@ -20,3 +20,9 @@ dest("-0.180653", "-78.467834", "Quito", "South America").
 money("4000").
 weeks("2").
 est_nr_destinations("20").
+
+travel_reason("Adventure and Action").
+food_finding("Cook in accomodation").
+surrounding(("Nature",8),("city",2)).
+transport_mode("no preferences").
+contact_to_locals(("yes",8),("no",2)).
