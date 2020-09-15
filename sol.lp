@@ -1,14 +1,23 @@
-calculate_money_time_ratio(@classify_wealth(M, W, "prog")):- money(M), weeks(W).
-get_number_of_destinations(@destinations(M, W, "python")):- money(M), weeks(W).
+%calculate how much money the traveller can approximately spent evenly over during the travel period
+calculate_money_time_ratio(@classify_wealth(M, W)):- money(M), weeks(W).
+get_number_of_destinations(@destinations(M, W)):- money(M), weeks(W).
 
-threshold(T):- get_number_of_destinations(T).
+threshold(T):- get_number_of_destinations((T,_)).
+%max_possible_number(T):- get_number_of_destinations((T,_)).
 int_instance(@return_as_int(I)):- est_nr_destinations(I).
-int_program(@return_as_int(I)):- get_number_of_destinations(I).
+int_program(@return_as_int(I)):- get_number_of_destinations((I,_)).
 
 get_delta_estimation_destination_number(D):- |A-B|=D, int_instance(A), int_program(B).
 
 
 3{travel_Destination(LONG,LAT,D,C): dest(LONG,LAT,D,C)}T:- threshold(T).
+%3{travel_Destination(_,_,D,_): dest(_,_,D,_)}T:- threshold(T).
+%3{travel_Destination(LONG,LAT,D,C): dest(LONG,LAT,D,C)}T:-max_possible_number(T).
+%3{travel_Destination(LONG,LAT,D,C): dest(LONG,LAT,D,C)}5.
+
+
+count_dest(S):- S=#count{C:travel_Destination(_,_,C,_)}.
+
 {first_destination(D): travel_Destination(_,_,D,_)}=1.
 {travel_to(A,B): travel_Destination(_,_,B,_)}=1:- travel_Destination(_,_,A,_).
 travel_to(S,B):- start_at(_,_,S,_), first_destination(B).
@@ -42,17 +51,6 @@ long_lat_vals(LAT_F,LONG_F,F, LAT_T,LONG_T,T):- display_connection(F,T), travel_
 
 #script(python).
 import math
-#def division(A,B):
-#  return str(float(A.string) / float(B.string))
-
-#get the lengths:
-#def get_length(f_lat,f_long,t_lat,t_long):
-
-#pythagoras for calculating the real distance
-#def pythagoras(A,B):
-#    c=math.sqrt(math.pow(float(A.string),2)+math.pow(float(B.string),2))
-#    return str(c)
-
 
 def get_length(f_lat,f_long, t_lat,t_long):
     if (f_long>0 and t_long>0) or (f_long<0 and t_long<0):
@@ -81,30 +79,27 @@ def get_distance(f_lat,f_long,f, t_lat,t_long, t):
     return int(round(c,0))
 
 
-def get_type(input_param):
-#    type_of_param = int(input_param.string)
-    type_of_param = int(input_param.string)
-#    type_of_param = input_param.int
-    return str(type(type_of_param))
-
 def return_as_int(factor):
     return int(factor.string)
 
 def delta_expactations_destination_number(E,R):
     return abs(E-R)
 
-def destinations(money, weeks, caller):
-    financial_category, destinations = classify_wealth(money,weeks, caller)
-#    we = float(w.string)
-    return str(int(destinations))
+def destinations(money, weeks):
+    financial_category, num_dest = classify_wealth(money,weeks)
+    return str(int(num_dest)), financial_category
 
-def classify_wealth(total_amount, weeks, caller):
+
+
+def classify_wealth(total_amount, weeks):
     money = float(total_amount.string)
     time = float(weeks.string)
     num_days = time*7
 
     if money<3000:
         answer = "not realistic"
+
+# the number of 21.7 comes from a calculation of the amount of money spent on transfer in long term journeys on averages
     available_amount = (money - ((21.7*money)/100))/time
     if available_amount <173 :
         answer = "not realistic"
@@ -122,10 +117,7 @@ def classify_wealth(total_amount, weeks, caller):
         num_destinations = num_days/3.5
         answer = "XL"
 
-    if caller.string == 'prog':
-        return answer
-    else:
-        return answer, num_destinations
+    return answer, str(int(num_destinations))
 #end.
 
 distances(@get_distance(LAT_F,LONG_F,F, LAT_T,LONG_T,T), F,T):- long_lat_vals(LAT_F,LONG_F,F, LAT_T,LONG_T,T).
@@ -139,14 +131,15 @@ count_cont_with_count(S):- S=#count{C:visited_continents(C)}.
 
 %preferences:
 
-calculate_money_time_ratio(@classify_wealth(M, W, "prog")):- money(M), weeks(W).
-get_number_of_destinations(@destinations(M, W, "python")):- money(M), weeks(W).
+calculate_money_time_ratio(@classify_wealth(M, W)):- money(M), weeks(W).
+%get_number_of_destinations(@destinations(M, W, "python")):- money(M), weeks(W).
 
 %get_weeks(@weeks(W)):- weeks(W).
 
 %constraints:
 %forbid to travel from destination A to destination A:
 :- travel_to(A,A).
+
 %forbid more than one subsequent destination:
 :- travel_to(A,B), travel_to(A,C), B!=C, travel_Destination(_,_,B,_), travel_Destination(_,_,C,_).
 %forbid more than 1 previous destination
@@ -166,13 +159,16 @@ get_number_of_destinations(@destinations(M, W, "python")):- money(M), weeks(W).
 %#show visited_continents/1.
 %#show connected_to_trip/1.
 %#show travel_to/2.
+%#show display_connection/2.
 %#show travel_Destination/4.
 %#show calculate_money_time_ratio/1.
 %#show weeks/1.
 %#show get_weeks/1
-#show get_delta_estimation_destination_number/1.
+%#show get_delta_estimation_destination_number/1.
 %#show est_nr_destinations/1.
-%#show get_number_of_destinations/1.
+#show get_number_of_destinations/1.
+#show threshold/1.
+#show count_dest/1.
 
 
 %#show type_in_instance/1.

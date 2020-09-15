@@ -6,6 +6,6 @@ dest("-54.7999968", "-68.2999988", "Ushuaia", "South America").
 dest("29.749907", "-95.358421", "Houston", "North America").
 
 
-money("3000").
-weeks("1.5").
-est_nr_destinations("4").
+money("5000").
+weeks("3").
+est_nr_destinations("5").
