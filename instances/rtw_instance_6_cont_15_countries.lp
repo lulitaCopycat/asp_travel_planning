@@ -47,8 +47,8 @@ budget, time, reason to travel, goals
 **%
 
 
-money("10000").
-weeks("10").
+money("4000").
+weeks("11").
 est_nr_destinations("10").
 
 %travel_reason("Adventure and Action").
