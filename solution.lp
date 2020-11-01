@@ -11,7 +11,6 @@ int_program(@return_as_int(I)):- get_number_of_destinations((I,_)).
 
 %get_delta_estimation_destination_number(D):- |A-B|=D, int_instance(A), int_program(B).
 
-%part Javier:
 {first_destination(D): dest(_,_,D,_)}=1.
 %{first_destination(D): dest(_,_,D,_), near(D) }=1.
 trip_destination(D) :- first_destination(D).
@@ -175,8 +174,9 @@ calculate_money_time_ratio(@classify_wealth(M, W)):- money(M), weeks(W).
 
 
 #show travel_to/2.
-#show count_dest/1.
+
 #show count_cont_with_count/1.
 #show visited_continents/1.
+#show count_dest/1.
 %#show last_journey_alt/2.
 %#show last_journey/2.
