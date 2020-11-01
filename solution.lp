@@ -3,22 +3,28 @@ calculate_money_time_ratio(@classify_wealth(M, W)):- money(M), weeks(W).
 get_number_of_destinations(@destinations(M, W)):- money(M), weeks(W).
 
 threshold(T):- get_number_of_destinations((T,_)).
+lower_(@lower_limit_function(T)):- threshold(T).
+int_lower(@return_as_int(I)):- lower_((I)).
 %max_possible_number(T):- get_number_of_destinations((T,_)).
-int_instance(@return_as_int(I)):- est_nr_destinations(I).
+%int_instance(@return_as_int(I)):- est_nr_destinations(I).
 int_program(@return_as_int(I)):- get_number_of_destinations((I,_)).
 
-get_delta_estimation_destination_number(D):- |A-B|=D, int_instance(A), int_program(B).
+%get_delta_estimation_destination_number(D):- |A-B|=D, int_instance(A), int_program(B).
 
 %part Javier:
 {first_destination(D): dest(_,_,D,_)}=1.
 %{first_destination(D): dest(_,_,D,_), near(D) }=1.
 trip_destination(D) :- first_destination(D).
 { travel_to(A,B) : dest(_,_,B,_) } 1 :- trip_destination(A).
+%L{travel_to(A,B): dest(_,_,B,_)}U:- int_program(U), int_lower(L), trip_destination(A).
+%Original from sol.lp
+%L{travel_destination(LONG,LAT,D,C): dest(LONG,LAT,D,C)}U:- int_program(U), int_lower(L).
 trip_destination(B) :- travel_to(A,B).
 
 count_dest(S):- S=#count{C:travel_to(_,C)}.
 %3{travel_Destination(LONG,LAT,D,C): dest(LONG,LAT,D,C)}T:- threshold(T).
-
+:- count_dest(S), int_lower(L), S<L.
+:- count_dest(S), int_program(U), S>U.
 
 
 %{first_destination(D): trip_destination(_,_,D,_)}=1.
@@ -27,6 +33,7 @@ count_dest(S):- S=#count{C:travel_to(_,C)}.
 %last_stop(D):- travel_to(D,L), first_destination(L), trip_destination(_,_,D,_).
 last_stop(D):- travel_to(D,L), first_destination(L), trip_destination(D).
 
+last_journey_alt(D,S):- travel_to(D,L), first_destination(L), trip_destination(D), first_destination(S).
 %start_at(S):- first_destination(S).
 last_journey(L,S):- last_stop(L),first_destination(S).
 travel_to(A,B):- last_journey(A,B).
@@ -134,8 +141,7 @@ def classify_wealth(total_amount, weeks):
 distances(@get_distance(LAT_F,LONG_F,F, LAT_T,LONG_T,T), F,T):- long_lat_vals(LAT_F,LONG_F,F, LAT_T,LONG_T,T).
 
 total_travelled_distance(S):- S = #sum{D : distances(D,_,_)}.
-#minimize{SUM_DIST: total_travelled_distance(SUM_DIST)}.
-
+%#minimize{SUM_DIST: total_travelled_distance(SUM_DIST)}.
 
 
 count_cont_with_count(S):- S=#count{C:visited_continents(C)}.
@@ -167,10 +173,10 @@ calculate_money_time_ratio(@classify_wealth(M, W)):- money(M), weeks(W).
 % :- S = #count{C: visited_continents(C)}, S<3.
 :- count_cont_with_count(S), S<3.
 
-%#show visited_continents/1.
-%#show get_number_of_destinations/1.
-%#show threshold/1.
-%#show trip_destination/1.
+
 #show travel_to/2.
 #show count_dest/1.
 #show count_cont_with_count/1.
+#show visited_continents/1.
+%#show last_journey_alt/2.
+%#show last_journey/2.
