@@ -1,0 +1,20 @@
+money("4000").
+weeks("11").
+
+
+#preference(distance, less(weight)){
+  D::total_travelled_distance(D)}.
+
+#preference(num_continent, more(weight)){
+  D::count_cont_with_count(D)}.
+#preference(num_visits_europe, less(cardinality)){
+  count_desti(S,"Europe")}.
+
+#preference(num_visits_asia, more(cardinality)){
+    count_desti(S,"Asia")}.
+
+
+#preference(all_prefs,pareto){**num_continent; **distance; **num_visits_europe; **num_visits_asia}.
+%#preference(both,pareto){**num_continent; **distance}.
+
+#optimize(all_prefs).

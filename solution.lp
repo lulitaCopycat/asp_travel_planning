@@ -51,7 +51,7 @@ connected_to_trip(D):- travel_to(D,F), connected_to_trip(F), trip_destination(D)
 %connected_to_trip(D):- travel_to(F,D), connected_to_trip(F), trip_destination(D).
 
 visited_continents(C):- connected_to_trip(D), dest(_,_,D,C).
-%visited_continents(C):- connected_to_trip(D), trip_destination(C).
+visited_destinations_in_continent(C,D):- connected_to_trip(D), dest(_,_,D,C).
 
 %long_lat_vals(LAT_F,LONG_F,F, LAT_T,LONG_T,T):- display_connection(F,T), travel_Destination(LAT_F,LONG_F,F,_),travel_Destination(LAT_T,LONG_T,T,_).
 %long_lat_vals(LAT_F,LONG_F,F, LAT_T,LONG_T,T):- display_connection(F,T), start_at(LAT_F,LONG_F,F,_),travel_Destination(LAT_T,LONG_T,T,_).
@@ -144,6 +144,9 @@ total_travelled_distance(S):- S = #sum{D : distances(D,_,_)}.
 
 
 count_cont_with_count(S):- S=#count{C:visited_continents(C)}.
+%count_dest_per_cont(S,C):- S=#count{D:visited_destinations_in_continent(C,D)}.
+%count_desti(S,C):- S=#count{D,C:visited_destinations_in_continent(C,D)}, visited_continents(C).
+count_desti(S,C):- S=#count{D:visited_destinations_in_continent(C,D)},visited_continents(C).
 
 %preferences:
 
@@ -169,14 +172,14 @@ calculate_money_time_ratio(@classify_wealth(M, W)):- money(M), weeks(W).
 %:- not last_journey(_,B), start_at(_,_,B,_).
 %first of all not allowing any destinations that are not included in the trip:
 %:- not connected_to_trip(D), travel_Destination(_,_,D,_).
-% :- S = #count{C: visited_continents(C)}, S<3.
 :- count_cont_with_count(S), S<3.
 
 
-#show travel_to/2.
-
-#show count_cont_with_count/1.
-#show visited_continents/1.
-#show count_dest/1.
-%#show last_journey_alt/2.
-%#show last_journey/2.
+%#show travel_to/2.
+#show connected_to_trip/1.
+%#show count_cont_with_count/1.
+%#show visited_continents/1.
+%#show count_dest/1.
+%#show visited_destinations_in_continent/2.
+#show count_desti/2.
+%#show count_dest_per_cont/2.
