@@ -5,25 +5,19 @@ get_number_of_destinations(@destinations(M, W)):- money(M), weeks(W).
 threshold(T):- get_number_of_destinations((T,_)).
 lower_(@lower_limit_function(T)):- threshold(T).
 int_lower(@return_as_int(I)):- lower_((I)).
-%max_possible_number(T):- get_number_of_destinations((T,_)).
-%int_instance(@return_as_int(I)):- est_nr_destinations(I).
 int_program(@return_as_int(I)):- get_number_of_destinations((I,_)).
-
-%get_delta_estimation_destination_number(D):- |A-B|=D, int_instance(A), int_program(B).
 
 {first_destination(D): dest(_,_,D,_)}=1.
 %{first_destination(D): dest(_,_,D,_), near(D) }=1.
 trip_destination(D) :- first_destination(D).
 { travel_to(A,B) : dest(_,_,B,_) } 1 :- trip_destination(A).
-%L{travel_to(A,B): dest(_,_,B,_)}U:- int_program(U), int_lower(L), trip_destination(A).
-%Original from sol.lp
-%L{travel_destination(LONG,LAT,D,C): dest(LONG,LAT,D,C)}U:- int_program(U), int_lower(L).
+
 trip_destination(B) :- travel_to(A,B).
 
 count_dest(S):- S=#count{C:travel_to(_,C)}.
-%3{travel_Destination(LONG,LAT,D,C): dest(LONG,LAT,D,C)}T:- threshold(T).
 :- count_dest(S), int_lower(L), S<L.
 :- count_dest(S), int_program(U), S>U.
+:- not 3{ trip_destination(A) }T, threshold(T).
 
 
 %{first_destination(D): trip_destination(_,_,D,_)}=1.
@@ -36,26 +30,15 @@ last_journey_alt(D,S):- travel_to(D,L), first_destination(L), trip_destination(D
 %start_at(S):- first_destination(S).
 last_journey(L,S):- last_stop(L),first_destination(S).
 travel_to(A,B):- last_journey(A,B).
-%travel_to(L,S):- last_journey(L,S).
 
-%display_connection(F,T):- travel_to(F,T), trip_destination(_,_,F,_),trip_destination(_,_,T,_), not first_destination(T).
-%display_connection(F,T):- travel_to(F,T), start_at(_,_,F,_),first_destination(T).
-%display_connection(F,T):- last_journey(F,T).
 
 connected_to_trip(D):- last_journey(D,_).
 connected_to_trip(D):- first_destination(D).
-%connected_to_trip(D):- last_journey(F,_), travel_to(D,F).
-%connected_to_trip(D):- travel_to(D,F), connected_to_trip(F), trip_destination(_,_,D,_).
-%connected_to_trip(D):- travel_to(F,D), connected_to_trip(F), trip_destination(_,_,D,_).
 connected_to_trip(D):- travel_to(D,F), connected_to_trip(F), trip_destination(D).
 %connected_to_trip(D):- travel_to(F,D), connected_to_trip(F), trip_destination(D).
 
 visited_continents(C):- connected_to_trip(D), dest(_,_,D,C).
 visited_destinations_in_continent(C,D):- connected_to_trip(D), dest(_,_,D,C).
-
-%long_lat_vals(LAT_F,LONG_F,F, LAT_T,LONG_T,T):- display_connection(F,T), travel_Destination(LAT_F,LONG_F,F,_),travel_Destination(LAT_T,LONG_T,T,_).
-%long_lat_vals(LAT_F,LONG_F,F, LAT_T,LONG_T,T):- display_connection(F,T), start_at(LAT_F,LONG_F,F,_),travel_Destination(LAT_T,LONG_T,T,_).
-%long_lat_vals(LAT_F,LONG_F,F, LAT_T,LONG_T,T):- display_connection(F,T), travel_Destination(LAT_F,LONG_F,F,_),start_at(LAT_T,LONG_T,T,_).
 
 long_lat_vals(LAT_F,LONG_F,F, LAT_T,LONG_T,T):- travel_to(F,T), trip_destination(F),trip_destination(T), dest(LAT_T,LONG_T,T,_), dest(LAT_F,LONG_F,F,_).
 long_lat_vals(LAT_F,LONG_F,F, LAT_T,LONG_T,T):- travel_to(F,T), first_destination(F),dest(LAT_F,LONG_F,F,_), trip_destination(T), dest(LAT_T,LONG_T,T,_).
@@ -102,9 +85,12 @@ def destinations(money, weeks):
     financial_category, num_dest = classify_wealth(money,weeks)
     return str(int(num_dest)), financial_category
 
-def lower_limit_function(d):
-    a = float(d.string)
+def lower_limit_function(threshold_value):
+    a = float(threshold_value.string)
+    #use logarithmic function to find a reasonable minimum number of destinations
+    # e.g. if the threshold_value = 10(i.e. max. number of destinations with given money + time), the log of 10 with base 1/2 is "-3"
     subtract = round((math.log(a,1/2)),0)
+    #by adding the 10 (threshold) and the -3, we get 7 as a minimum number of destinations to travel
     lower = a + subtract
     return str(int(lower))
 
@@ -159,9 +145,6 @@ calculate_money_time_ratio(@classify_wealth(M, W)):- money(M), weeks(W).
 %forbid to travel from destination A to destination A:
 :- travel_to(A,A).
 
-
-:- not 3{ trip_destination(A) }T, threshold(T).
-
 %forbid more than one subsequent destination:
 :- travel_to(A,B), travel_to(A,C), B!=C, trip_destination(B), trip_destination(C).
 %forbid more than 1 previous destination
@@ -175,11 +158,11 @@ calculate_money_time_ratio(@classify_wealth(M, W)):- money(M), weeks(W).
 :- count_cont_with_count(S), S<3.
 
 
-%#show travel_to/2.
+#show travel_to/2.
 #show connected_to_trip/1.
 %#show count_cont_with_count/1.
-%#show visited_continents/1.
+#show visited_continents/1.
 %#show count_dest/1.
-%#show visited_destinations_in_continent/2.
+#show visited_destinations_in_continent/2.
 #show count_desti/2.
-%#show count_dest_per_cont/2.
+#show count_dest_per_cont/2.
