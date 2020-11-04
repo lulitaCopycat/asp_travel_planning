@@ -1,5 +1,5 @@
-money("4000").
-weeks("11").
+%money("4000").
+%weeks("11").
 
 
 #preference(distance, less(weight)){

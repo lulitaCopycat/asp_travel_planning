@@ -1,5 +1,5 @@
 %calculate how much money the traveller can approximately spent evenly over during the travel period
-calculate_money_time_ratio(@classify_wealth(M, W)):- money(M), weeks(W).
+%calculate_money_time_ratio(@classify_wealth(M, W)):- money(M), weeks(W).
 get_number_of_destinations(@destinations(M, W)):- money(M), weeks(W).
 
 threshold(T):- get_number_of_destinations((T,_)).
@@ -87,12 +87,15 @@ def destinations(money, weeks):
 
 def lower_limit_function(threshold_value):
     a = float(threshold_value.string)
+    if a<3:
+      return str(int(1))
     #use logarithmic function to find a reasonable minimum number of destinations
     # e.g. if the threshold_value = 10(i.e. max. number of destinations with given money + time), the log of 10 with base 1/2 is "-3"
-    subtract = round((math.log(a,1/2)),0)
+    else:
+      subtract = round((math.log(a,1/2)),0)
     #by adding the 10 (threshold) and the -3, we get 7 as a minimum number of destinations to travel
-    lower = a + subtract
-    return str(int(lower))
+      lower = a + subtract
+      return str(int(lower))
 
 def classify_wealth(total_amount, weeks):
     money = float(total_amount.string)
@@ -136,7 +139,7 @@ count_desti(S,C):- S=#count{D:visited_destinations_in_continent(C,D)},visited_co
 
 %preferences:
 
-calculate_money_time_ratio(@classify_wealth(M, W)):- money(M), weeks(W).
+%calculate_money_time_ratio(@classify_wealth(M, W)):- money(M), weeks(W).
 %get_number_of_destinations(@destinations(M, W, "python")):- money(M), weeks(W).
 
 %get_weeks(@weeks(W)):- weeks(W).
@@ -159,10 +162,10 @@ calculate_money_time_ratio(@classify_wealth(M, W)):- money(M), weeks(W).
 
 
 #show travel_to/2.
-#show connected_to_trip/1.
+%#show connected_to_trip/1.
 %#show count_cont_with_count/1.
-#show visited_continents/1.
+%#show visited_continents/1.
 %#show count_dest/1.
-#show visited_destinations_in_continent/2.
-#show count_desti/2.
-#show count_dest_per_cont/2.
+%#show visited_destinations_in_continent/2.
+%#show count_desti/2.
+%#show count_dest_per_cont/2.
