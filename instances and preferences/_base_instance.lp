@@ -1,6 +1,12 @@
 % structure: dest(lat, long, name)
 %start_at("53", "13", "Berlin", "Europe").
 
+%**dest("58.305801", "-134.433304", "Juneau",  "North America").
+dest("53.893009", "27.567444", "Minsk", "Europe").
+dest("-36.848461","174.763336", "Auckland", "Australia").
+dest("-54.7999968", "-68.2999988", "Ushuaia", "South America").
+**%
+
 dest("53.893009", "27.567444", "Minsk", "Europe").
 dest("56.01839", "92.86717", "Krasnoyarsk", "Europe").
 dest("37.178055", "-3.600833", "Granada", "Europe").

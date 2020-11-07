@@ -1,7 +1,3 @@
-%money("4000").
-%weeks("11").
-
-
 #preference(distance, less(weight)){
   D::total_travelled_distance(D)}.
 

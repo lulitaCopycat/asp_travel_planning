@@ -44,6 +44,7 @@ long_lat_vals(LAT_F,LONG_F,F, LAT_T,LONG_T,T):- travel_to(F,T), trip_destination
 long_lat_vals(LAT_F,LONG_F,F, LAT_T,LONG_T,T):- travel_to(F,T), first_destination(F),dest(LAT_F,LONG_F,F,_), trip_destination(T), dest(LAT_T,LONG_T,T,_).
 long_lat_vals(LAT_F,LONG_F,F, LAT_T,LONG_T,T):- travel_to(F,T), trip_destination(F), dest(LAT_F,LONG_F,F,_), first_destination(T), dest(LAT_T,LONG_T,T,_).
 
+geo_data(F,FC,FLONG,FLAT, T,TC,TLONG,TLAT):- travel_to(F,T), dest(FLAT,FLONG,F,FC),dest(TLAT,TLONG,T,TC).
 
 #script(python).
 import math
@@ -161,7 +162,8 @@ count_desti(S,C):- S=#count{D:visited_destinations_in_continent(C,D)},visited_co
 :- count_cont_with_count(S), S<3.
 
 
-#show travel_to/2.
+%#show travel_to/2.
+#show geo_data/8.
 %#show connected_to_trip/1.
 %#show count_cont_with_count/1.
 %#show visited_continents/1.
