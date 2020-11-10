@@ -86,17 +86,22 @@ def destinations(money, weeks):
     financial_category, num_dest = classify_wealth(money,weeks)
     return str(int(num_dest)), financial_category
 
+
 def lower_limit_function(threshold_value):
     a = float(threshold_value.string)
     if a<3:
       return str(int(1))
-    #use logarithmic function to find a reasonable minimum number of destinations
-    # e.g. if the threshold_value = 10(i.e. max. number of destinations with given money + time), the log of 10 with base 1/2 is "-3"
+      #use logarithmic function to find a reasonable minimum number of destinations
+      # e.g. if the threshold_value = 10(i.e. max. number of destinations with given money + time), the log of 10 with base 1/2 is "-3"
     else:
       subtract = round((math.log(a,1/2)),0)
-    #by adding the 10 (threshold) and the -3, we get 7 as a minimum number of destinations to travel
+        #by adding the 10 (threshold) and the -3, we get 7 as a minimum number of destinations to travel
       lower = a + subtract
-      return str(int(lower))
+      if lower<4:
+        return str(3)
+      else:
+        return str(int(lower))
+
 
 def classify_wealth(total_amount, weeks):
     money = float(total_amount.string)
@@ -133,7 +138,7 @@ total_travelled_distance(S):- S = #sum{D : distances(D,_,_)}.
 %#minimize{SUM_DIST: total_travelled_distance(SUM_DIST)}.
 
 
-count_cont_with_count(S):- S=#count{C:visited_continents(C)}.
+count_continents_visited(S):- S=#count{C:visited_continents(C)}.
 %count_dest_per_cont(S,C):- S=#count{D:visited_destinations_in_continent(C,D)}.
 %count_desti(S,C):- S=#count{D,C:visited_destinations_in_continent(C,D)}, visited_continents(C).
 count_desti(S,C):- S=#count{D:visited_destinations_in_continent(C,D)},visited_continents(C).
@@ -159,13 +164,13 @@ count_desti(S,C):- S=#count{D:visited_destinations_in_continent(C,D)},visited_co
 %:- not last_journey(_,B), start_at(_,_,B,_).
 %first of all not allowing any destinations that are not included in the trip:
 %:- not connected_to_trip(D), travel_Destination(_,_,D,_).
-:- count_cont_with_count(S), S<3.
+:- count_continents_visited(S), S<3.
 
 
-%#show travel_to/2.
-#show geo_data/8.
+#show travel_to/2.
+%#show geo_data/8.
 %#show connected_to_trip/1.
-%#show count_cont_with_count/1.
+%#show count_continents_visited/1.
 %#show visited_continents/1.
 %#show count_dest/1.
 %#show visited_destinations_in_continent/2.

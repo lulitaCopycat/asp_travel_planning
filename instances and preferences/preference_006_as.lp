@@ -1,8 +1,8 @@
 #preference(distance, less(weight)){
   D::total_travelled_distance(D)
 }.
-#preference(num_continent, more(weight)){
-  D::count_cont_with_count(D)
+#preference(num_continents, more(weight)){
+  D::count_continents_visited(D)
 }.
-#preference(both,pareto){**num_continent; **distance}.
+#preference(both,pareto){**num_continents; **distance}.
 #optimize(both).

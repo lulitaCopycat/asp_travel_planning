@@ -1,7 +1,7 @@
 #preference(distance, less(weight)){
   D::total_travelled_distance(D)}.
 #preference(num_continent, more(weight)){
-  D::count_cont_with_count(D)}.
+  D::count_continents_visited(D)}.
 %#preference(visit_ny, subset){
 %  connected_to_trip("New York")}.
 #preference(visit_ny, more(cardinality)){
