@@ -13,6 +13,7 @@ import cartopy
 from time import sleep
 import matplotlib
 from IPython import get_ipython
+import sys
 
 #read all destinations which are given in the _base_instance.lp-file
 #content_base = open('instances and preferences/_base_instance.lp', 'r').read()
@@ -61,24 +62,18 @@ while True:
         f= open("traveller.lp","w+")
         f.write('money("'+money+'").weeks("'+weeks+'").start_at("'+to_dict[start][0]+'","'+to_dict[start][1]+'","'+start+'","'+to_dict[start][2]+'").')
         f.close()
-        
+
         progress_bar.update_bar(1)         
         
         #instantiate clingo object and load necessary files, including the traveller profile created before
         ctl = clingo.Control()
-#        ctl.load("instances and preferences/_base_instance.lp")
         ctl.load("_base_instance.lp")
 
         #load one of the three preference files 
-#        ctl.load("instances and preferences/preference_001.lp")
         ctl.load("preference_001.lp")
 #        ctl.load("preference_002.lp")
 #        ctl.load("preference_003.lp")
         
-#        ctl.load("instances and preferences/preference_002.lp")
-#        ctl.load("instances and preferences/preference_003.lp")
-
-#        ctl.load("instances and preferences/solution.lp")
         ctl.load("solution.lp")
 
         #load the traveller lp created before
@@ -91,7 +86,7 @@ while True:
             for model in handle:
                 #collect the stable models (i.e. "solutions")
                 models.append(str(model))
-        
+
         if len(models)==0:
             print('Result: "unsatisfiable"')
             print('Unfortunately You did not enter numbers or You do not have enough money for the amount of time You want to travel.')
@@ -102,6 +97,7 @@ while True:
         #cleaning and splitting of the result string 
         geo_data_content = models[0] 
         geo_split = geo_data_content.replace("geo_data(", "").replace(")",",").replace('"','').replace('â”œÂ®','e').replace("\' ","").split(",")
+
         
         progress_bar.update_bar(4)         
         
@@ -113,7 +109,6 @@ while True:
             i+=4
         
         progress_bar.update_bar(5)         
-
         pairwise =[]
         i =0
         #obtain pairwise connection
@@ -149,10 +144,8 @@ while True:
         progress_bar.update_bar(8)         
         
         ax.coastlines()
-        ax.legend()
         ax.set_global()
         plt.savefig('result_maps/result.png')
-#        plt.savefig('result.png')
 
         progress_bar.update_bar(9)        
         window_progress.close()
@@ -160,15 +153,16 @@ while True:
         layout_res_ =[[sg.Image('result_maps/result.png', key='key1', size=(990, 550))]]
         window_res_ = sg.Window('Route Suggestion: ', layout_res_,size=(1000,570)) 
         event_r_ = window_res_.read()
-
+        
         window_res_.close()
         
-
+    
 #####
-plt.title('Route suggestion:')
-plt.show()
-
 window.close()
+quit()
+
+
+
 
 
 
