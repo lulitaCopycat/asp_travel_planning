@@ -34,7 +34,7 @@ to_dict = dict(zip(keys,vals))
 #create the elements for the first gui using the dictionary zipped before to display a selection of starting points
 layout = [[sg.Text('Weeks')],
           [sg.InputText('3')], 
-          [sg.Text('Money')],
+          [sg.Text('Money - €')],
           [sg.InputText('4000')],
           [sg.Text('Choose a Starting Point:')],
           [sg.Listbox(values=keys, size=(35, 3),default_values='Berlin',enable_events=True)],
