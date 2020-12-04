@@ -1,8 +1,15 @@
+start_at("53.53167", "13.381777", "Berlin", "Europe").
 #preference(distance, less(weight)){
-  D::total_travelled_distance(D)
-}.
-#preference(num_continents, more(weight)){
-  D::count_continents_visited(D)
-}.
-#preference(both,pareto){**num_continents; **distance}.
-#optimize(both).
+  D::total_travelled_distance(D)}.
+#preference(num_continent, less(weight)){
+  D::count_continents_visited(D)}.
+#preference(visit_ny, more(cardinality)){
+  connected_to_trip("New York")}.
+
+#preference(num_visits_asia, more(cardinality)){
+    count_desti(S,"Asia")}.
+
+
+#preference(all_prefs,and){**num_continent; **distance; **visit_ny; **num_visits_asia}.
+
+#optimize(all_prefs).

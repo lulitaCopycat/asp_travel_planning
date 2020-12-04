@@ -3,3 +3,4 @@ start_at("53.53167", "13.381777", "Berlin", "Europe").
 #minimize{SUM_CONTINENTS: count_continents_visited(SUM_CONTINENTS)}.
 #minimize{S: count_desti(S,C), C="Europe"}.
 #maximize{S: count_desti(S,C), C="Asia"}.
+#maximize{S: connected_to_trip(S), S="New York"}.
