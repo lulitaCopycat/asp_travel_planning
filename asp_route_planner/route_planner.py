@@ -16,7 +16,6 @@ from IPython import get_ipython
 import sys
 
 #read all destinations which are given in the _base_instance.lp-file
-#content_base = open('instances and preferences/_base_instance.lp', 'r').read()
 content_base = open('_base_instance.lp', 'r').read()
 split_1 = content_base.split('\n')
 
@@ -34,7 +33,7 @@ to_dict = dict(zip(keys,vals))
 #create the elements for the first gui using the dictionary zipped before to display a selection of starting points
 layout = [[sg.Text('Weeks')],
           [sg.InputText('3')], 
-          [sg.Text('Money - €')],
+          [sg.Text('Money - US-$')],
           [sg.InputText('4000')],
           [sg.Text('Choose a Starting Point:')],
           [sg.Listbox(values=keys, size=(35, 3),default_values='Berlin',enable_events=True)],
@@ -55,33 +54,32 @@ while True:
         window_progress = sg.Window('Route Design Progress', layout_progress_window, finalize=True)
         progress_bar = window_progress['progress']
         
-        #read the values from the initial gui and create a lp-file holding a "traveller profile"
+        #read the values from the initial gui and create a lp-file holding a "traveler profile"
         weeks = values[0]
         money = values[1]
         start = values[2][0]  
-        f= open("traveller.lp","w+")
+        f= open("traveler.lp","w+")
         f.write('money("'+money+'").weeks("'+weeks+'").start_at("'+to_dict[start][0]+'","'+to_dict[start][1]+'","'+start+'","'+to_dict[start][2]+'").')
         f.close()
 
         progress_bar.update_bar(1)         
         
-        #instantiate clingo object and load necessary files, including the traveller profile created before
+        #instantiate clingo object and load necessary files, including the traveler profile created before
+
         ctl = clingo.Control()
         ctl.load("_base_instance.lp")
 
         #load one of the three preference files 
-        ctl.load("preference_001.lp")
-#        ctl.load("preference_002.lp")
-#        ctl.load("preference_003.lp")
-        
+        ctl.load("preference_001.lp")        
         ctl.load("solution.lp")
 
-        #load the traveller lp created before
-        ctl.load("traveller.lp")
+        #load the traveler.lp created before
+        ctl.load("traveler.lp")
+
+        #ground and solve       
         ctl.ground([("base", [])])
         ctl.configuration.solve.models="1"
         models = []
-        
         with ctl.solve(yield_=True) as handle:
             for model in handle:
                 #collect the stable models (i.e. "solutions")
@@ -89,13 +87,13 @@ while True:
 
         if len(models)==0:
             print('Result: "unsatisfiable"')
-            print('Unfortunately You did not enter numbers or You do not have enough money for the amount of time You want to travel.')
-            raise SystemExit("Stop right there!")
+            print('Unfortunately you did not enter numbers or you do not have enough money for the time you want to travel.')
+            raise SystemExit("exit the script!")
 
         
         #take the first resulting stable model,
-        #cleaning and splitting of the result string 
         geo_data_content = models[0] 
+        #cleaning and splitting of the result string 
         geo_split = geo_data_content.replace("geo_data(", "").replace(")",",").replace('"','').replace('â”œÂ®','e').replace("\' ","").split(",")
 
         
@@ -103,7 +101,7 @@ while True:
         
         i=0
         singles = []
-        #get the travelled destinations as singles
+        #get the traveled destinations as singles
         while i<len(geo_split)-4:
             singles.append([geo_split[i],geo_split[i+1],geo_split[i+2],geo_split[i+3]])
             i+=4
